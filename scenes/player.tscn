@@ -1,0 +1,25 @@
+[gd_scene load_steps=4 format=3 uid="uid://yn1oi5lrghxb"]
+
+[ext_resource type="Script" uid="uid://bmcitu47dxij2" path="res://scripts/player.gd" id="1_g2els"]
+[ext_resource type="PackedScene" uid="uid://c13ubict0pyub" path="res://assets/models/carl_johnson_cj.glb" id="2_g2els"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_g2els"]
+height = 1.7885742
+radius = 0.3
+
+[node name="Player" type="CharacterBody3D"]
+script = ExtResource("1_g2els")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8942871, 0)
+shape = SubResource("CylinderShape3D_g2els")
+
+[node name="graphics" type="Node3D" parent="."]
+
+[node name="Sketchfab_Scene2" parent="graphics" instance=ExtResource("2_g2els")]
+transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 0, 0, 0)
+
+[node name="camera_mount" type="Node3D" parent="."]
+
+[node name="Camera3D" type="Camera3D" parent="camera_mount"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.05482, 3.162816)
