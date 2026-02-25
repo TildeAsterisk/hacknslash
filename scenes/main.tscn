@@ -1,9 +1,10 @@
-[gd_scene load_steps=11 format=3 uid="uid://00swccko4mlj"]
+[gd_scene load_steps=13 format=3 uid="uid://00swccko4mlj"]
 
 [ext_resource type="Texture2D" uid="uid://c8arnlq67qi7" path="res://assets/textures/grids/Dark/texture_05.png" id="1_sugp2"]
 [ext_resource type="Texture2D" uid="uid://b58xv1joypxo5" path="res://assets/textures/grids/Orange/texture_09.png" id="2_jyhfs"]
 [ext_resource type="Texture2D" uid="uid://hu5rfl6qr2nv" path="res://assets/textures/grids/Red/texture_09.png" id="3_tbgi4"]
 [ext_resource type="PackedScene" uid="uid://yn1oi5lrghxb" path="res://scenes/player.tscn" id="4_jyhfs"]
+[ext_resource type="PackedScene" uid="uid://vlv1bpsxo1dx" path="res://scenes/enemy.tscn" id="5_tbgi4"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_i5arm"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -31,6 +32,33 @@ uv1_triplanar = true
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_tereu"]
 albedo_texture = ExtResource("3_tbgi4")
+
+[sub_resource type="GDScript" id="GDScript_tbgi4"]
+script/source = "extends CharacterBody3D
+@onready var player: CharacterBody3D = $\"../Player\"
+
+const SPEED = 2.5
+const JUMP_VELOCITY = 4.5
+
+
+func _physics_process(delta: float) -> void:
+	# Add the gravity.
+	if not is_on_floor():
+		velocity += get_gravity() * delta
+
+	# Handle jump.
+
+	# Get direction to player character and move towards direction
+	var direction := transform.origin.direction_to(player.transform.origin).normalized()
+	if direction:
+		velocity.x = direction.x * SPEED
+		velocity.z = direction.z * SPEED
+	else:
+		velocity.x = move_toward(velocity.x, 0, SPEED)
+		velocity.z = move_toward(velocity.z, 0, SPEED)
+
+	move_and_slide()
+"
 
 [node name="World" type="Node3D"]
 
@@ -66,3 +94,7 @@ use_collision = true
 size = Vector3(3, 3, 3)
 
 [node name="Player" parent="." instance=ExtResource("4_jyhfs")]
+
+[node name="Enemy" parent="." instance=ExtResource("5_tbgi4")]
+transform = Transform3D(-1, 0, -1.1920929e-07, 0, 1, 0, 1.1920929e-07, 0, -1, 0, 0, -4)
+script = SubResource("GDScript_tbgi4")

@@ -1,11 +1,21 @@
 extends CharacterBody3D
 
 @onready var camera_mount: Node3D = $camera_mount
+@onready var animation_player: AnimationPlayer = $graphics/mixamo_base/AnimationPlayer
+@onready var graphics: Node3D = $graphics
 
-const SPEED = 5.0
+var SPEED = 3
 const JUMP_VELOCITY = 4.5
-const sensitivity_x = 0.5
-const sensitivity_y = 0.25
+
+var walking_speed = 3.0
+var running_speed = 5.0
+
+var running = false;
+
+var is_locked = false
+
+@export var sensitivity_x = 0.25
+@export var sensitivity_y = 0.25
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
@@ -15,10 +25,26 @@ func _ready():
 
 func _input(event):
 	if event is InputEventMouseMotion:
-		rotate_y(deg_to_rad(-event.relative.x)*sensitivity_x)
+		rotate_y(deg_to_rad(-event.relative.x) * sensitivity_x)
+		graphics.rotate_y(deg_to_rad(event.relative.x)*sensitivity_x)
 		camera_mount.rotate_x(deg_to_rad(-event.relative.y)*sensitivity_y)
 
 func _physics_process(delta):
+	if !animation_player.is_playing():
+		is_locked = false
+	
+	if Input.is_action_just_pressed("Attack"):
+		if animation_player.current_animation != "kick":
+			animation_player.play("kick")
+			is_locked = true
+	
+	if Input.is_action_pressed("Run"):
+		SPEED = running_speed
+		running = true
+	else:
+		SPEED = walking_speed
+		running = false
+	
 	# Add the gravity.
 	if not is_on_floor():
 		velocity.y -= gravity * delta
@@ -32,10 +58,25 @@ func _physics_process(delta):
 	var input_dir = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
 	var direction = (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 	if direction:
+		if !is_locked:
+			if running:
+				if animation_player.current_animation != "Run":
+					animation_player.play("running")
+			else:
+				if animation_player.current_animation != "walking":
+					animation_player.play("walking")
+					
+			graphics.look_at(position+direction)
+			
 		velocity.x = direction.x * SPEED
 		velocity.z = direction.z * SPEED
 	else:
+		if !is_locked:
+			if animation_player.current_animation != "walking" or animation_player.current_animation != "running":
+				animation_player.play("idle")
+				
 		velocity.x = move_toward(velocity.x, 0, SPEED)
 		velocity.z = move_toward(velocity.z, 0, SPEED)
-
-	move_and_slide()
+		
+	if !is_locked:
+		move_and_slide()

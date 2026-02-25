@@ -2,20 +2,20 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cgy5x8x6urpo6"
-path.s3tc="res://.godot/imported/lowpoly_male_base_mesh_0.png-5e654058627c1748c65930164b26b1f9.s3tc.ctex"
+uid="uid://d1qot0kwj43g0"
+path.s3tc="res://.godot/imported/carl_johnson_cj_3.png-c3a6c3c8f918179b96d5b64037e1cac8.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
 }
 generator_parameters={
-"md5": "a25062e64ecf339e5d6e864b66c2eeb6"
+"md5": "1e39aa6a2bf86563a130af13382a69e4"
 }
 
 [deps]
 
-source_file="res://assets/models/lowpoly_male_base_mesh_0.png"
-dest_files=["res://.godot/imported/lowpoly_male_base_mesh_0.png-5e654058627c1748c65930164b26b1f9.s3tc.ctex"]
+source_file="res://assets/models/tex/carl_johnson_cj_3.png"
+dest_files=["res://.godot/imported/carl_johnson_cj_3.png-c3a6c3c8f918179b96d5b64037e1cac8.s3tc.ctex"]
 
 [params]
 

@@ -37,6 +37,14 @@ import_script/path=""
 materials/extract=0
 materials/extract_format=0
 materials/extract_path=""
-_subresources={}
+_subresources={
+"nodes": {
+"PATH:Sketchfab_model/CarlJohnson-GTASA_FBX/RootNode/Object_3/Skeleton3D": {
+"retarget/bone_map": Object(BoneMap,"resource_local_to_scene":false,"resource_name":"","profile":Object(SkeletonProfileHumanoid,"resource_local_to_scene":false,"resource_name":"","root_bone":&"Root","scale_base_bone":&"Hips","group_size":4,"bone_size":56,"script":null)
+,"bonemap":null,"bone_map/Root":&"root ground_01","bone_map/Hips":&"root hips_00","bone_map/Spine":&"spine lower_011","bone_map/Chest":&"spine middle_012","bone_map/UpperChest":&"spine upper_013","bone_map/Neck":&"head neck lower_014","bone_map/Head":&"head jaw_030","bone_map/LeftEye":&"head eyeball left_016","bone_map/RightEye":&"head eyeball right_017","bone_map/Jaw":&"head jaw_030","bone_map/LeftShoulder":&"arm left shoulder 1_038","bone_map/LeftUpperArm":&"arm left shoulder 2_039","bone_map/LeftLowerArm":&"arm left elbow_040","bone_map/LeftHand":&"arm left wrist_041","bone_map/LeftThumbMetacarpal":&"arm left finger 1a_045","bone_map/LeftThumbProximal":&"arm left finger 1b_046","bone_map/LeftThumbDistal":&"arm left finger 1c_047","bone_map/LeftIndexProximal":&"arm left finger 2a_042","bone_map/LeftIndexIntermediate":&"arm left finger 2b_043","bone_map/LeftIndexDistal":&"arm left finger 2c_044","bone_map/LeftMiddleProximal":&"","bone_map/LeftMiddleIntermediate":&"","bone_map/LeftMiddleDistal":&"","bone_map/LeftRingProximal":&"","bone_map/LeftRingIntermediate":&"","bone_map/LeftRingDistal":&"","bone_map/LeftLittleProximal":&"","bone_map/LeftLittleIntermediate":&"","bone_map/LeftLittleDistal":&"","bone_map/RightShoulder":&"arm right shoulder 1_048","bone_map/RightUpperArm":&"arm right shoulder 2_049","bone_map/RightLowerArm":&"arm right elbow_050","bone_map/RightHand":&"arm right wrist_051","bone_map/RightThumbMetacarpal":&"arm right finger 1a_055","bone_map/RightThumbProximal":&"arm right finger 1b_056","bone_map/RightThumbDistal":&"arm right finger 1c_057","bone_map/RightIndexProximal":&"arm right finger 2a_052","bone_map/RightIndexIntermediate":&"arm right finger 2b_053","bone_map/RightIndexDistal":&"arm right finger 2c_054","bone_map/RightMiddleProximal":&"","bone_map/RightMiddleIntermediate":&"","bone_map/RightMiddleDistal":&"","bone_map/RightRingProximal":&"","bone_map/RightRingIntermediate":&"","bone_map/RightRingDistal":&"","bone_map/RightLittleProximal":&"","bone_map/RightLittleIntermediate":&"","bone_map/RightLittleDistal":&"","bone_map/LeftUpperLeg":&"leg left thigh_03","bone_map/LeftLowerLeg":&"leg left knee_04","bone_map/LeftFoot":&"leg left ankle_05","bone_map/LeftToes":&"leg left toes_06","bone_map/RightUpperLeg":&"leg right thigh_07","bone_map/RightLowerLeg":&"leg right knee_08","bone_map/RightFoot":&"leg right ankle_09","bone_map/RightToes":&"leg right toes_010","script":null)
+
+}
+}
+}
 gltf/naming_version=2
 gltf/embedded_image_handling=1
