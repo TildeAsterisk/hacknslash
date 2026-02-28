@@ -11,6 +11,8 @@ const JUMP_VELOCITY = 4.5
 enum State { IDLE, CHASE, ATTACK }
 var state: State = State.IDLE
 
+var is_dead = false
+
 @export var detection_radius: float = 12.0
 @export var attack_range: float = 1.6
 @export var attack_cooldown: float = 1.2
@@ -23,6 +25,10 @@ func _physics_process(delta: float) -> void:
 		velocity += get_gravity() * delta
 
 	if not is_instance_valid(player):
+		return
+		
+	# Check if dead
+	if is_dead:
 		return
 
 	var to_player: Vector3 = player.global_transform.origin - global_transform.origin
@@ -87,3 +93,13 @@ func _physics_process(delta: float) -> void:
 
 	# move
 	move_and_slide()
+
+func take_damage(dmg: int) -> void:
+	is_dead = true
+	print(self.name+" has taken "+str(dmg)+ " damage. ouch!")
+	# Play death animation
+	if animation_player.current_animation != anim_path+"knock_down" and animation_player.has_animation(anim_path+"knock_down"):
+		animation_player.play(anim_path+"knock_down")
+	# Delete object once current animation is finished
+	await animation_player.animation_finished
+	queue_free() # Delete object... /!\

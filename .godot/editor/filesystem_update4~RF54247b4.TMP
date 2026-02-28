@@ -1,0 +1,17 @@
+res://assets/models/animations/get_up.res
+res://assets/models/animations/idle.res
+res://assets/models/animations/kick.res
+res://assets/models/animations/knock_down.res
+res://assets/models/animations/running.res
+res://assets/models/animations/walking.res
+res://assets/tmp/punching.res
+res://scenes/player.tscn
+res://scenes/enemy.tscn
+res://scripts/player.gd
+res://assets/models/AnimationLibrary.res
+res://scenes/enemy.gd
+res://scripts/enemy.gd
+res://scenes/main.tscn
+res://assets/models/idle_fight.res
+res://assets/tmp/running.res
+res://README.md
