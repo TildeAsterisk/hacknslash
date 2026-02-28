@@ -1,15 +1,14 @@
 [remap]
 
-importer="scene"
+importer="animation_library"
 importer_version=1
-type="PackedScene"
+type="AnimationLibrary"
 uid="uid://bdq6ajic6fjrf"
-path="res://.godot/imported/mixamo_base.glb-554ecb1a4e19b3df006a5f8f00ffac1d.scn"
+valid=false
 
 [deps]
 
 source_file="res://assets/models/mixamo_base.glb"
-dest_files=["res://.godot/imported/mixamo_base.glb-554ecb1a4e19b3df006a5f8f00ffac1d.scn"]
 
 [params]
 

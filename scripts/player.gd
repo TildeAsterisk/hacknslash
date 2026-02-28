@@ -1,8 +1,10 @@
 extends CharacterBody3D
 
 @onready var camera_mount: Node3D = $camera_mount
-@onready var animation_player: AnimationPlayer = $graphics/mixamo_base/AnimationPlayer
+@onready var animation_player: AnimationPlayer = $graphics/char_model/AnimationPlayer
 @onready var graphics: Node3D = $graphics
+
+const anim_path = "PlayerAnimationLibrary/"
 
 var SPEED = 3
 const JUMP_VELOCITY = 4.5
@@ -34,8 +36,8 @@ func _physics_process(delta):
 		is_locked = false
 	
 	if Input.is_action_just_pressed("Attack"):
-		if animation_player.current_animation != "kick":
-			animation_player.play("kick")
+		if animation_player.current_animation != anim_path+"kick":
+			animation_player.play(anim_path+"kick")
 			is_locked = true
 	
 	if Input.is_action_pressed("Run"):
@@ -60,11 +62,11 @@ func _physics_process(delta):
 	if direction:
 		if !is_locked:
 			if running:
-				if animation_player.current_animation != "Run":
-					animation_player.play("running")
+				if animation_player.current_animation != anim_path+"running":
+					animation_player.play(anim_path+"running")
 			else:
-				if animation_player.current_animation != "walking":
-					animation_player.play("walking")
+				if animation_player.current_animation != anim_path+"walking":
+					animation_player.play(anim_path+"walking")
 					
 			graphics.look_at(position+direction)
 			
@@ -72,8 +74,8 @@ func _physics_process(delta):
 		velocity.z = direction.z * SPEED
 	else:
 		if !is_locked:
-			if animation_player.current_animation != "walking" or animation_player.current_animation != "running":
-				animation_player.play("idle")
+			if animation_player.current_animation != anim_path+"walking" or animation_player.current_animation != anim_path+"running":
+				animation_player.play(anim_path+"idle")
 				
 		velocity.x = move_toward(velocity.x, 0, SPEED)
 		velocity.z = move_toward(velocity.z, 0, SPEED)
