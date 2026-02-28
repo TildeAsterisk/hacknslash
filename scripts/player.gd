@@ -20,12 +20,20 @@ var is_locked = false
 @export var sensitivity_y = 0.25
 @export var attack_damage: int = 15
 @export var attack_arc_threshold: float = 0.0  # 0.0 = 180° arc (front half)
+@export var enemy_spawn_time = 5
 
 var enemies_hit_this_swing = []
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 
 func _ready():
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	
+	# Setup spawn timer
+	var timer = Timer.new()
+	add_child(timer)
+	timer.wait_time = enemy_spawn_time
+	timer.timeout.connect(spawn_enemy_around_player)
+	timer.start()
 
 func _input(event):
 	if event is InputEventMouseMotion:
@@ -34,13 +42,14 @@ func _input(event):
 		camera_mount.rotate_x(deg_to_rad(-event.relative.y)*sensitivity_y)
 
 func _physics_process(delta):
+	
 	if !animation_player.is_playing():
 		is_locked = false
 		enemies_hit_this_swing.clear()  # Clear hit list when attack animation ends
 	
 	if Input.is_action_just_pressed("Attack"):
-		if animation_player.current_animation != anim_path+"kick":
-			animation_player.play(anim_path+"kick")
+		if animation_player.current_animation != anim_path+"punch":
+			animation_player.play(anim_path+"punch")
 			is_locked = true
 			enemies_hit_this_swing.clear()  # Reset hit list for new attack
 			_process_attack()  # Perform attack check
@@ -116,3 +125,26 @@ func _process_attack():
 				body.take_damage(attack_damage)
 			else:
 				print(body.name+" takes damage.")
+
+@export var enemy_scene: PackedScene # Drag your enemy.tscn here in the Inspector
+@export var min_spawn_distance: float = 10.0
+@export var max_spawn_distance: float = 20.0
+func spawn_enemy_around_player():
+	for e in 10:
+		# 1. Pick a random angle (0 to 360 degrees in radians)
+		var angle = randf_range(0, TAU) 
+		
+		# 2. Pick a random distance within your range
+		# Use sqrt for more uniform distribution if spawning in a full circle
+		var distance = randf_range(min_spawn_distance, max_spawn_distance)
+		# 3. Calculate the relative position offset
+		var offset = Vector3(cos(angle) * distance, 0, sin(angle) * distance)
+		
+		# 4. Create and place the enemy
+		var enemy = enemy_scene.instantiate()
+		get_parent().add_child(enemy) # Add to the world, not as a child of the spawner
+		enemy.add_to_group("enemy")
+		enemy.global_position = self.global_position + offset
+		# Spawn enemies in random order around player.
+	
+	return

@@ -1,30 +1,33 @@
-[gd_scene load_steps=14 format=3 uid="uid://00swccko4mlj"]
+[gd_scene load_steps=15 format=3 uid="uid://00swccko4mlj"]
 
 [ext_resource type="Script" uid="uid://ctsqfb2fjal5g" path="res://addons/infinite_heightmap_terrain/infinite_terrain.gd" id="1_tefeu"]
 [ext_resource type="Texture2D" uid="uid://b58xv1joypxo5" path="res://assets/textures/grids/Orange/texture_09.png" id="2_jyhfs"]
 [ext_resource type="Texture2D" uid="uid://hu5rfl6qr2nv" path="res://assets/textures/grids/Red/texture_09.png" id="3_tbgi4"]
 [ext_resource type="PackedScene" uid="uid://yn1oi5lrghxb" path="res://scenes/player.tscn" id="4_jyhfs"]
+[ext_resource type="Texture2D" uid="uid://bh4xqwlbxvi6" path="res://assets/textures/tilable-IMG_0044-dark.png" id="4_tefeu"]
 [ext_resource type="PackedScene" uid="uid://vlv1bpsxo1dx" path="res://scenes/enemy.tscn" id="5_tbgi4"]
 
-[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_i5arm"]
-sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
-ground_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_tefeu"]
+sky_top_color = Color(2.0214916e-06, 0.49560267, 0.63157177, 1)
+sky_horizon_color = Color(0.5531627, 0.67974085, 0.7191209, 1)
+sky_energy_multiplier = 0.8
 
-[sub_resource type="Sky" id="Sky_wc5p8"]
-sky_material = SubResource("ProceduralSkyMaterial_i5arm")
+[sub_resource type="Sky" id="Sky_o6xl0"]
+sky_material = SubResource("ProceduralSkyMaterial_tefeu")
 
 [sub_resource type="Environment" id="Environment_jsk3o"]
 background_mode = 2
-sky = SubResource("Sky_wc5p8")
+sky = SubResource("Sky_o6xl0")
+ambient_light_sky_contribution = 0.7
 tonemap_mode = 2
 sdfgi_enabled = true
 glow_enabled = true
 fog_enabled = true
 fog_mode = 1
-fog_light_color = Color(0, 0.6136496, 0.7304931, 1)
 fog_density = 1.0
-fog_depth_begin = 100.0
-fog_depth_end = 4200.0
+fog_depth_curve = 0.36602223
+fog_depth_begin = 40.0
+fog_depth_end = 3000.0
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6iypd"]
 albedo_texture = ExtResource("2_jyhfs")
@@ -42,13 +45,17 @@ point_count = 2
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_tipki"]
 vertex_color_use_as_albedo = true
+albedo_texture = ExtResource("4_tefeu")
+uv1_scale = Vector3(33.155, 33.155, 33.155)
 
 [node name="World" type="Node3D"]
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999997, 0.86602545, -0.50000006, 0.75, -0.43301266, 0, 0, 0)
-light_energy = 0.25
+transform = Transform3D(-0.8660254, -0.32139382, 0.38302228, 0, 0.76604444, 0.6427876, -0.50000006, 0.55667037, -0.66341394, 0, 0, 0)
+light_energy = 0.75
 shadow_enabled = true
+shadow_blur = 0.0
+directional_shadow_mode = 0
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_jsk3o")
@@ -57,22 +64,25 @@ environment = SubResource("Environment_jsk3o")
 
 [node name="CSGBox3D" type="CSGBox3D" parent="Map"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.4559879, 0.5, 5.138323)
+visible = false
 material_override = SubResource("StandardMaterial3D_6iypd")
 use_collision = true
 
 [node name="CSGBox3D2" type="CSGBox3D" parent="Map"]
 transform = Transform3D(0.7133972, 0, -0.7007599, 0, 1, 0, 0.7007599, 0, 0.7133972, 0, 0.5, -8.303)
+visible = false
 material_override = SubResource("StandardMaterial3D_tereu")
 use_collision = true
 
 [node name="CSGBox3D3" type="CSGBox3D" parent="Map"]
 transform = Transform3D(0.8176074, 0, 0.5757761, 0, 1, 0, -0.5757761, 0, 0.8176074, -5.8874035, 1.5, -3.776899)
+visible = false
 material_override = SubResource("StandardMaterial3D_6iypd")
 use_collision = true
 size = Vector3(3, 3, 3)
 
 [node name="InfiniteTerrain" type="StaticBody3D" parent="Map" node_paths=PackedStringArray("player")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.165, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.81, 0)
 script = ExtResource("1_tefeu")
 player = NodePath("../../Player")
 terrain_noise = SubResource("FastNoiseLite_tefeu")
@@ -81,6 +91,11 @@ mesh_resolution = 0.1
 terrain_color_steepness_curve = SubResource("Curve_o6xl0")
 terrain_material = SubResource("StandardMaterial3D_tipki")
 metadata/_custom_type_script = "uid://ctsqfb2fjal5g"
+
+[node name="Player" parent="." instance=ExtResource("4_jyhfs")]
+enemy_spawn_time = 10
+min_spawn_distance = 5.0
+max_spawn_distance = 10.0
 
 [node name="Enemy" parent="." groups=["enemy"] instance=ExtResource("5_tbgi4")]
 transform = Transform3D(-1, 0, -1.1920929e-07, 0, 1, 0, 1.1920929e-07, 0, -1, 0, 0, -4)
@@ -94,4 +109,20 @@ transform = Transform3D(-1, 0, -3.5762787e-07, 0, 1, 0, 3.5762787e-07, 0, -1, -1
 [node name="Enemy3" parent="." groups=["enemy"] instance=ExtResource("5_tbgi4")]
 transform = Transform3D(1, 0, 2.3841858e-07, 0, 1, 0, -2.3841858e-07, 0, 1, 3.8691635, -4.7683716e-07, 3.196971)
 
-[node name="Player" parent="." instance=ExtResource("4_jyhfs")]
+[node name="Enemy5" parent="." groups=["enemy"] instance=ExtResource("5_tbgi4")]
+transform = Transform3D(1, 0, 4.7683716e-07, 0, 1, 0, -4.7683716e-07, 0, 1, -5.4339724, -9.536743e-07, -6.974926)
+
+[node name="Enemy6" parent="." groups=["enemy"] instance=ExtResource("5_tbgi4")]
+transform = Transform3D(-0.8107165, 0, -0.58543897, 0, 1, 0, 0.58543897, 0, -0.8107165, -2.8167858, 0, -6.307119)
+
+[node name="Enemy7" parent="." groups=["enemy"] instance=ExtResource("5_tbgi4")]
+transform = Transform3D(-0.8107165, 0, -0.58543897, 0, 1, 0, 0.58543897, 0, -0.8107165, -4.5583067, 0, 6.547135)
+
+[node name="Enemy8" parent="." groups=["enemy"] instance=ExtResource("5_tbgi4")]
+transform = Transform3D(-0.81071633, 0, -0.58543915, 0, 1, 0, 0.58543915, 0, -0.81071633, -13.07578, -4.7683716e-07, 4.047688)
+
+[node name="Enemy9" parent="." groups=["enemy"] instance=ExtResource("5_tbgi4")]
+transform = Transform3D(0.81071645, 0, 0.585439, 0, 1, 0, -0.585439, 0, 0.81071645, 4.533396, -4.7683716e-07, -2.737574)
+
+[node name="Enemy10" parent="." groups=["enemy"] instance=ExtResource("5_tbgi4")]
+transform = Transform3D(0.8107163, 0, 0.5854392, 0, 1, 0, -0.5854392, 0, 0.8107163, -8.963835, -9.536743e-07, -5.537682)

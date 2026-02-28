@@ -41,13 +41,14 @@ func _physics_process(delta: float) -> void:
 	elif dist <= detection_radius:
 		state = State.CHASE
 	else:
-		state = State.IDLE
+		#state = State.IDLE
+		state=state
 
 	# State behaviour
 	match state:
 		State.IDLE:
-			if animation_player.current_animation != anim_path+"idle" and animation_player.has_animation(anim_path+"idle"):
-				animation_player.play(anim_path+"idle")
+			if animation_player.current_animation != anim_path+"idle_fight" and animation_player.has_animation(anim_path+"idle_fight"):
+				animation_player.play(anim_path+"idle_fight")
 			velocity.x = move_toward(velocity.x, 0, SPEED)
 			velocity.z = move_toward(velocity.z, 0, SPEED)
 
