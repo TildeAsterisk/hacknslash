@@ -1,3 +1,5 @@
+StaticBody3D
 CollisionShape3D
+InfiniteTerrain
 Area3D
 Skeleton3D
