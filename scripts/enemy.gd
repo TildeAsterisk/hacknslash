@@ -2,6 +2,7 @@ extends CharacterBody3D
 @onready var player: CharacterBody3D = $"../Player"
 @onready var animation_player: AnimationPlayer = $graphics/char_model/AnimationPlayer
 @onready var graphics: Node3D = $graphics
+@onready var game_manager: Node = $"../GameManager"
 
 const anim_path = "EnemyAnimationLibrary/"
 
@@ -9,7 +10,7 @@ const SPEED = 2.5
 const JUMP_VELOCITY = 4.5
 
 enum State { IDLE, CHASE, ATTACK }
-var state: State = State.IDLE
+var state: State = State.CHASE
 
 var is_dead = false
 
@@ -72,7 +73,7 @@ func _physics_process(delta: float) -> void:
 			if attack_timer <= 0.0:
 				# choose an available attack animation
 				var attack_anim := "null"
-				for name in ["kick","attack", "Atk", "kick", "hit"]:
+				for name in ["punch","attack", "Atk", "kick", "hit"]:
 					if animation_player.has_animation(anim_path+name):
 						attack_anim = name
 						break
@@ -95,12 +96,13 @@ func _physics_process(delta: float) -> void:
 	# move
 	move_and_slide()
 
-func take_damage(dmg: int) -> void:
+func take_damage(_dmg: int) -> void:
 	is_dead = true
-	print(self.name+" has taken "+str(dmg)+ " damage. ouch!")
+	#print(self.name+" has taken "+str(dmg)+ " damage. ouch!")
 	# Play death animation
 	if animation_player.current_animation != anim_path+"knock_down" and animation_player.has_animation(anim_path+"knock_down"):
 		animation_player.play(anim_path+"knock_down")
 	# Delete object once current animation is finished
+	game_manager.spawned_entities.erase(self)
 	await animation_player.animation_finished
 	queue_free() # Delete object... /!\

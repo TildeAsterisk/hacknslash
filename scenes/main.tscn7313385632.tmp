@@ -1,14 +1,11 @@
-[gd_scene load_steps=22 format=3 uid="uid://00swccko4mlj"]
+[gd_scene load_steps=14 format=3 uid="uid://00swccko4mlj"]
 
 [ext_resource type="Script" uid="uid://b2j16e72vk0t0" path="res://scripts/game_manager.gd" id="1_tbgi4"]
 [ext_resource type="Script" uid="uid://ctsqfb2fjal5g" path="res://addons/infinite_heightmap_terrain/infinite_terrain.gd" id="1_tefeu"]
 [ext_resource type="FontFile" uid="uid://cnlv8acdn6sx" path="res://assets/EBGaramond-VariableFont_wght.ttf" id="3_tefeu"]
 [ext_resource type="PackedScene" uid="uid://yn1oi5lrghxb" path="res://scenes/player.tscn" id="4_jyhfs"]
 [ext_resource type="Texture2D" uid="uid://bh4xqwlbxvi6" path="res://assets/textures/tilable-IMG_0044-dark.png" id="4_tefeu"]
-[ext_resource type="PackedScene" uid="uid://drwp60x7q7wtx" path="res://addons/BurstParticles2D/BurstParticles2D-demo/MultiParticleExample1.tscn" id="5_85g3d"]
 [ext_resource type="PackedScene" uid="uid://vlv1bpsxo1dx" path="res://scenes/enemy.tscn" id="5_tbgi4"]
-[ext_resource type="Texture2D" uid="uid://bc1a651wldmth" path="res://icon.svg" id="5_tipki"]
-[ext_resource type="PackedScene" uid="uid://duqam6ffexoc8" path="res://addons/BurstParticles2D/BurstParticles2D-demo/MultiParticleExample2.tscn" id="6_85g3d"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_o6xl0"]
 font = ExtResource("3_tefeu")
@@ -17,26 +14,6 @@ font_color = Color(0.74978, 0.74978, 0.74977994, 1)
 shadow_size = 10
 shadow_color = Color(0, 0, 0, 0.5019608)
 shadow_offset = Vector2(1.86, 2.495)
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_qc6vu"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_o6xl0"]
-bg_color = Color(0.7683127, 0.56028074, 0, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qc6vu"]
-bg_color = Color(0.12103007, 0.121030085, 0.121029995, 1)
-expand_margin_left = 1.0
-expand_margin_top = 1.0
-expand_margin_right = 1.0
-expand_margin_bottom = 1.0
-shadow_color = Color(0, 0, 0, 0.27450982)
-shadow_offset = Vector2(0, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vjxg4"]
-bg_color = Color(0.657209, 0, 0.15517709, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8wl12"]
-bg_color = Color(0, 0.6990086, 0.5896884, 1)
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_tefeu"]
 sky_top_color = Color(2.0214916e-06, 0.49560267, 0.63157177, 1)
@@ -104,87 +81,6 @@ text = "0"
 label_settings = SubResource("LabelSettings_o6xl0")
 horizontal_alignment = 2
 vertical_alignment = 2
-
-[node name="TextureRect" type="TextureRect" parent="GameManager/CanvasLayer/Control"]
-z_index = 2
-layout_mode = 1
-anchors_preset = 2
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_left = 8.0
-offset_top = -40.0
-offset_right = 136.0
-offset_bottom = 88.0
-grow_vertical = 0
-scale = Vector2(0.25, 0.25)
-texture = ExtResource("5_tipki")
-
-[node name="EnergyBar" type="ProgressBar" parent="GameManager/CanvasLayer/Control"]
-z_index = 1
-custom_minimum_size = Vector2(100, 4)
-layout_mode = 1
-anchors_preset = 2
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_left = 40.0
-offset_top = -16.0
-offset_right = 140.0
-offset_bottom = -12.0
-grow_vertical = 0
-theme_override_styles/background = SubResource("StyleBoxEmpty_qc6vu")
-theme_override_styles/fill = SubResource("StyleBoxFlat_o6xl0")
-value = 95.0
-show_percentage = false
-
-[node name="DamageBar" type="ProgressBar" parent="GameManager/CanvasLayer/Control/EnergyBar"]
-z_index = -1
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_styles/background = SubResource("StyleBoxFlat_qc6vu")
-theme_override_styles/fill = SubResource("StyleBoxFlat_vjxg4")
-show_percentage = false
-
-[node name="Healthbar" type="ProgressBar" parent="GameManager/CanvasLayer/Control"]
-z_index = 1
-custom_minimum_size = Vector2(100, 4)
-layout_mode = 1
-anchors_preset = 2
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_left = 40.0
-offset_top = -24.0
-offset_right = 140.0
-offset_bottom = -20.0
-grow_vertical = 0
-theme_override_styles/background = SubResource("StyleBoxEmpty_qc6vu")
-theme_override_styles/fill = SubResource("StyleBoxFlat_8wl12")
-value = 60.0
-show_percentage = false
-
-[node name="DamageBar" type="ProgressBar" parent="GameManager/CanvasLayer/Control/Healthbar"]
-z_index = -1
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_styles/background = SubResource("StyleBoxFlat_qc6vu")
-theme_override_styles/fill = SubResource("StyleBoxFlat_vjxg4")
-value = 80.0
-show_percentage = false
-
-[node name="MultiParticleExample1" parent="GameManager/CanvasLayer/Control" instance=ExtResource("5_85g3d")]
-position = Vector2(216, 215.99997)
-scale = Vector2(0.01, 0.01)
-
-[node name="MultiParticleExample2" parent="GameManager/CanvasLayer/Control" instance=ExtResource("6_85g3d")]
-position = Vector2(448, 240)
-scale = Vector2(0.001, 0.001)
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(-0.8660254, -0.32139382, 0.38302228, 0, 0.76604444, 0.6427876, -0.50000006, 0.55667037, -0.66341394, 0, 0, 0)
