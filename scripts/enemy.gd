@@ -20,6 +20,8 @@ var is_dead = false
 var attack_timer: float = 0.0
 @export var attack_damage: int = 10
 
+var target_stopping_distance:float = 0.001
+
 func _physics_process(delta: float) -> void:
 	# gravity
 	if not is_on_floor():
@@ -48,37 +50,37 @@ func _physics_process(delta: float) -> void:
 	# State behaviour
 	match state:
 		State.IDLE:
-			if animation_player.current_animation != anim_path+"idle_fight" and animation_player.has_animation(anim_path+"idle_fight"):
-				animation_player.play(anim_path+"idle_fight")
+			if animation_player.current_animation != anim_path+"idle" and animation_player.has_animation(anim_path+"idle"):
+				animation_player.play(anim_path+"idle")
 			velocity.x = move_toward(velocity.x, 0, SPEED)
 			velocity.z = move_toward(velocity.z, 0, SPEED)
 
 		State.CHASE:
-			if horizontal.length() > 0.001:
+			if horizontal.length() > target_stopping_distance:
 				var dir = horizontal.normalized()
 				# face player (only yaw)
 				graphics.look_at(global_transform.origin + Vector3(dir.x, 0, dir.z))
-				if animation_player.current_animation != "running" and animation_player.has_animation(anim_path+"running"):
-					animation_player.play(anim_path+"running")
+				# If the enemy is barely moving, play idle
+				if velocity.length() < 0.1:
+					if animation_player.current_animation != "idle" and animation_player.has_animation(anim_path+"idle"):
+						animation_player.play(anim_path+"idle")
+				else:
+					if animation_player.current_animation != "running" and animation_player.has_animation(anim_path+"running"):
+						animation_player.play(anim_path+"running")
 				velocity.x = dir.x * SPEED
 				velocity.z = dir.z * SPEED
 
 		State.ATTACK:
-			# Stop running before attacking
-			#animation_player.stop(true)
 			# stop moving while attacking
 			velocity.x = move_toward(velocity.x, 0, SPEED)
 			velocity.z = move_toward(velocity.z, 0, SPEED)
 
 			if attack_timer <= 0.0:
-				# choose an available attack animation
-				var attack_anim := "null"
-				for name in ["punch","attack", "Atk", "kick", "hit"]:
-					if animation_player.has_animation(anim_path+name):
-						attack_anim = name
-						break
-				if attack_anim:
-					animation_player.play(anim_path+attack_anim)
+				# choose a random attack animation
+				var attack_anim = get_random_attack_anim()
+				if attack_anim != "":
+					animation_player.play(anim_path + attack_anim)
+				# Reset attack timer
 				attack_timer = attack_cooldown
 
 				# apply damage / knockback if very close
@@ -90,11 +92,26 @@ func _physics_process(delta: float) -> void:
 						if player is CharacterBody3D:
 							player.velocity += (horizontal.normalized() * 4.0)
 
+
 	# cooldown
 	attack_timer = max(attack_timer - delta, 0.0)
 
 	# move
 	move_and_slide()
+
+func get_random_attack_anim() -> String:
+	var possible = ["punch", "kick"]
+	var available: Array[String] = []
+	
+	for name in possible:
+		if animation_player.has_animation(anim_path + name):
+			available.append(name)
+	
+	if available.is_empty():
+		return ""  # no valid animations found
+	
+	return available[randi() % available.size()]
+
 
 func take_damage(_dmg: int) -> void:
 	is_dead = true

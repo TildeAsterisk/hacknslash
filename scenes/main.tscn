@@ -1,14 +1,12 @@
-[gd_scene load_steps=22 format=3 uid="uid://00swccko4mlj"]
+[gd_scene load_steps=20 format=3 uid="uid://00swccko4mlj"]
 
 [ext_resource type="Script" uid="uid://b2j16e72vk0t0" path="res://scripts/game_manager.gd" id="1_tbgi4"]
 [ext_resource type="Script" uid="uid://ctsqfb2fjal5g" path="res://addons/infinite_heightmap_terrain/infinite_terrain.gd" id="1_tefeu"]
 [ext_resource type="FontFile" uid="uid://cnlv8acdn6sx" path="res://assets/EBGaramond-VariableFont_wght.ttf" id="3_tefeu"]
 [ext_resource type="PackedScene" uid="uid://yn1oi5lrghxb" path="res://scenes/player.tscn" id="4_jyhfs"]
 [ext_resource type="Texture2D" uid="uid://bh4xqwlbxvi6" path="res://assets/textures/tilable-IMG_0044-dark.png" id="4_tefeu"]
-[ext_resource type="PackedScene" uid="uid://drwp60x7q7wtx" path="res://addons/BurstParticles2D/BurstParticles2D-demo/MultiParticleExample1.tscn" id="5_85g3d"]
 [ext_resource type="PackedScene" uid="uid://vlv1bpsxo1dx" path="res://scenes/enemy.tscn" id="5_tbgi4"]
 [ext_resource type="Texture2D" uid="uid://bc1a651wldmth" path="res://icon.svg" id="5_tipki"]
-[ext_resource type="PackedScene" uid="uid://duqam6ffexoc8" path="res://addons/BurstParticles2D/BurstParticles2D-demo/MultiParticleExample2.tscn" id="6_85g3d"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_o6xl0"]
 font = ExtResource("3_tefeu")
@@ -55,10 +53,11 @@ sdfgi_enabled = true
 glow_enabled = true
 fog_enabled = true
 fog_mode = 1
+fog_light_color = Color(0.40735212, 0.4406726, 0.4925109, 1)
 fog_density = 1.0
+fog_sky_affect = 0.0
 fog_depth_curve = 0.36602223
 fog_depth_begin = 40.0
-fog_depth_end = 3000.0
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_tefeu"]
 frequency = 0.0005
@@ -74,7 +73,7 @@ uv1_scale = Vector3(33.155, 33.155, 33.155)
 
 [node name="World" type="Node3D"]
 
-[node name="GameManager" type="Node" parent="."]
+[node name="GameManager" type="Node3D" parent="."]
 script = ExtResource("1_tbgi4")
 enemy_scene = ExtResource("5_tbgi4")
 
@@ -178,14 +177,6 @@ theme_override_styles/fill = SubResource("StyleBoxFlat_vjxg4")
 value = 80.0
 show_percentage = false
 
-[node name="MultiParticleExample1" parent="GameManager/CanvasLayer/Control" instance=ExtResource("5_85g3d")]
-position = Vector2(216, 215.99997)
-scale = Vector2(0.01, 0.01)
-
-[node name="MultiParticleExample2" parent="GameManager/CanvasLayer/Control" instance=ExtResource("6_85g3d")]
-position = Vector2(448, 240)
-scale = Vector2(0.001, 0.001)
-
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(-0.8660254, -0.32139382, 0.38302228, 0, 0.76604444, 0.6427876, -0.50000006, 0.55667037, -0.66341394, 0, 0, 0)
 light_energy = 0.75
@@ -203,7 +194,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.81, 0)
 script = ExtResource("1_tefeu")
 player = NodePath("../../Player")
 terrain_noise = SubResource("FastNoiseLite_tefeu")
-chunk_radius = 10
+chunk_radius = 2
 mesh_resolution = 0.1
 terrain_color_steepness_curve = SubResource("Curve_o6xl0")
 terrain_material = SubResource("StandardMaterial3D_tipki")
@@ -214,30 +205,3 @@ enemy_spawn_time = 10
 
 [node name="Enemy" parent="." groups=["enemy"] instance=ExtResource("5_tbgi4")]
 transform = Transform3D(-1, 0, -1.1920929e-07, 0, 1, 0, 1.1920929e-07, 0, -1, 0, 0, -4)
-
-[node name="Enemy2" parent="." groups=["enemy"] instance=ExtResource("5_tbgi4")]
-transform = Transform3D(-1, 0, -1.1920929e-07, 0, 1, 0, 1.1920929e-07, 0, -1, -8.93726, 0, 5.4016027)
-
-[node name="Enemy4" parent="." groups=["enemy"] instance=ExtResource("5_tbgi4")]
-transform = Transform3D(-1, 0, -3.5762787e-07, 0, 1, 0, 3.5762787e-07, 0, -1, -14.379243, -4.7683716e-07, -1.6112005)
-
-[node name="Enemy3" parent="." groups=["enemy"] instance=ExtResource("5_tbgi4")]
-transform = Transform3D(1, 0, 2.3841858e-07, 0, 1, 0, -2.3841858e-07, 0, 1, 3.8691635, -4.7683716e-07, 3.196971)
-
-[node name="Enemy5" parent="." groups=["enemy"] instance=ExtResource("5_tbgi4")]
-transform = Transform3D(1, 0, 4.7683716e-07, 0, 1, 0, -4.7683716e-07, 0, 1, -5.4339724, -9.536743e-07, -6.974926)
-
-[node name="Enemy6" parent="." groups=["enemy"] instance=ExtResource("5_tbgi4")]
-transform = Transform3D(-0.8107165, 0, -0.58543897, 0, 1, 0, 0.58543897, 0, -0.8107165, -2.8167858, 0, -6.307119)
-
-[node name="Enemy7" parent="." groups=["enemy"] instance=ExtResource("5_tbgi4")]
-transform = Transform3D(-0.8107165, 0, -0.58543897, 0, 1, 0, 0.58543897, 0, -0.8107165, -4.5583067, 0, 6.547135)
-
-[node name="Enemy8" parent="." groups=["enemy"] instance=ExtResource("5_tbgi4")]
-transform = Transform3D(-0.81071633, 0, -0.58543915, 0, 1, 0, 0.58543915, 0, -0.81071633, -13.07578, -4.7683716e-07, 4.047688)
-
-[node name="Enemy9" parent="." groups=["enemy"] instance=ExtResource("5_tbgi4")]
-transform = Transform3D(0.81071645, 0, 0.585439, 0, 1, 0, -0.585439, 0, 0.81071645, 4.533396, -4.7683716e-07, -2.737574)
-
-[node name="Enemy10" parent="." groups=["enemy"] instance=ExtResource("5_tbgi4")]
-transform = Transform3D(0.8107163, 0, 0.5854392, 0, 1, 0, -0.5854392, 0, 0.8107163, -8.963835, -9.536743e-07, -5.537682)

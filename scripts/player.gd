@@ -114,11 +114,13 @@ func _process_attack():
 		
 		# Check if enemy is in front (180° arc, dot > 0)
 		if dot_product > attack_arc_threshold:
-			# Enemy is hit!
+			# Enemy is hit! take damage
 			enemies_hit_this_swing.append(body)
 			if body.has_method("take_damage"):
 				body.take_damage(attack_damage)
 			else:
-				print(body.name+" takes damage.")
+				print(body.name+" takes "+attack_damage+" damage.")
+			# Spawn hit effect
+			
 			# Add & Update Points!
 			game_manager.update_points()

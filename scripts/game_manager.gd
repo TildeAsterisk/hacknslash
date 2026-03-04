@@ -1,4 +1,4 @@
-extends Node
+extends Node3D
 
 const max_world_enemy_count : int = 25
 var spawned_entities : Array = []
@@ -39,14 +39,18 @@ func spawn_enemy_around_player():
 		# Use sqrt for more uniform distribution if spawning in a full circle
 		var distance = randf_range(min_spawn_distance, max_spawn_distance)
 		# 3. Calculate the relative position offset
-		var offset = Vector3(cos(angle) * distance, 0, sin(angle) * distance)
+		var offset = Vector3(cos(angle) * distance, 30, sin(angle) * distance)
 		
 		# 4. Create and place the enemy
 		var enemy = enemy_scene.instantiate()
 		spawned_entities.push_back(enemy)
 		get_parent().add_child(enemy) # Add to the world, not as a child of the spawner
 		enemy.add_to_group("enemy")
-		enemy.global_position = player.global_position + offset
+		#
+		var enemy_pos = player.global_position + offset
+		# Get Y heght, terraint surface
+		var ground_y = get_terrain_height(enemy_pos)
+		enemy.global_position = Vector3(enemy_pos.x, ground_y, enemy_pos.z)
 		# Spawn enemies in random order around player.
 		
 	return
@@ -54,3 +58,14 @@ func spawn_enemy_around_player():
 func update_points():
 	points+=1
 	label.text = str(points)
+
+
+func get_terrain_height(pos: Vector3) -> float:
+	# Use a RayCast to find the exact floor height at these coordinates
+	var space_state = get_world_3d().direct_space_state
+	var query = PhysicsRayQueryParameters3D.create(pos, pos + Vector3.DOWN * 200)
+	var result = space_state.intersect_ray(query)
+	
+	if result:
+		return result.position.y
+	return 0.0 # Default if no ground hit
