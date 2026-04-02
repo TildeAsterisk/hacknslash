@@ -12,7 +12,7 @@ const STAT_CONFIG = {
 	"max_health": {"min": 10, "max": 50, "is_int": true},
 	"attack_damage": {"min": 5, "max": 15, "is_int": true},
 	"walking_speed": {"min": 0.5, "max": 1.5, "is_int": false},
-	"running_speed": {"min": 0.5, "max": 1.5, "is_int": false}
+	"attack_speed": {"min": 0.5, "max": 1.5, "is_int": false}
 }
 
 ## Randomizes 1-3 modifiers from the STAT_CONFIG
@@ -35,5 +35,6 @@ func randomize_upgrade():
 		
 		modifiers[stat_name] = value
 	
-	# Update description dynamically
+	# Update name and description dynamically
+	upgrade_name = "Random upgrade"
 	description = "Increases: " + str(modifiers)

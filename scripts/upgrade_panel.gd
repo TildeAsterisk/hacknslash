@@ -7,9 +7,13 @@ extends Control
 var upgrades = []
 
 func _ready():
-	button1.connect("pressed", Callable(self, "_on_button_pressed").bind(0), 0)
-	button2.connect("pressed", Callable(self, "_on_button_pressed").bind(1), 1)
-	button3.connect("pressed", Callable(self, "_on_button_pressed").bind(2), 2)
+	button1.set_meta("indx",0)
+	button1.pressed.connect(_on_button_pressed.bind(button1))
+	button2.set_meta("indx",1)
+	button2.pressed.connect(_on_button_pressed.bind(button2))
+	button3.set_meta("indx",2)
+	button3.pressed.connect(_on_button_pressed.bind(button3))
+
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	visible = false
 
@@ -20,27 +24,36 @@ func show_upgrades(upgs: Array):
 	button3.text = upgs[2].description
 	visible = true
 
-func _on_button_pressed(index: int):
+func _on_button_pressed(button: Button) -> void:
+	var index = int(button.get_meta("indx"))
 	apply_upgrade(upgrades[index])
-	print("Applied upgrade: " + upgrades[index].upgrade_name)
+	print("Applied upgrade: " + upgrades[index].upgrade_name + " - " + upgrades[index].description)
 
 	# Resume game
 	get_tree().paused = false
 	visible = false
-	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
+	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
 func apply_upgrade(up: Upgrade):
 	var game_manager = get_parent().get_parent()  # CanvasLayer -> GameManager
 	var player = game_manager.get_parent().get_node("Player")
-	for stat in up.modifiers:
-		if stat == "attack_damage":
-			player.attack_damage += int(up.modifiers[stat])
-		elif stat == "walking_speed":
-			player.walking_speed += up.modifiers[stat]
-		elif stat == "running_speed":
-			player.running_speed += up.modifiers[stat]
-		elif stat == "max_health":
-			player.max_health += int(up.modifiers[stat])
-			player.health = min(player.health + int(up.modifiers[stat]), player.max_health)
+
+	for stat_name in up.modifiers.keys():
+		var amount = float(up.modifiers[stat_name])
+		if player.has_method("add_player_stat_modifier"):
+			player.add_player_stat_modifier(stat_name, amount)
+		else:
+			match stat_name:
+				"attack_damage":
+					player.attack_damage += int(amount)
+				"walking_speed":
+					player.walking_speed += amount
+				"attack_speed":
+					player.attack_speed += amount
+				"max_health":
+					player.max_health += int(amount)
+					player.health = min(player.health + int(amount), player.max_health)
+				_:
+					push_error("Upgrade stat %s not recognized" % stat_name)
+
 	hide()
-	get_tree().paused = false
