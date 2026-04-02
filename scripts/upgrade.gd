@@ -9,10 +9,10 @@ var modifiers: Dictionary = {}
 
 # Define possible stats and their random ranges
 const STAT_CONFIG = {
-	"max_health": {"min": 10, "max": 50, "is_int": true},
-	"attack_damage": {"min": 5, "max": 15, "is_int": true},
-	"walking_speed": {"min": 0.5, "max": 1.5, "is_int": false},
-	"attack_speed": {"min": 0.5, "max": 1.5, "is_int": false}
+	"HEALTH": {"min": 10, "max": 50, "is_int": true},
+	"ATK_DAMAGE": {"min": 5, "max": 15, "is_int": true},
+	"MOV_SPEED": {"min": 0.5, "max": 1.5, "is_int": false},
+	"ATK_SPEED": {"min": 0.5, "max": 1.5, "is_int": false}
 }
 
 ## Randomizes 1-3 modifiers from the STAT_CONFIG

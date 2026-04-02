@@ -41,13 +41,13 @@ func _ready():
 
 func add_player_stat_modifier(stat_name: String, amount: float) -> void:
 	match stat_name:
-		"attack_damage":
+		"ATK_DAMAGE":
 			Player_Stats["ATK_DAMAGE"].add_modifier(amount)
-		"walking_speed":
+		"MOV_SPEED":
 			Player_Stats["MOV_SPEED"].add_modifier(amount)
-		"attack_speed":
+		"ATK_SPEED":
 			Player_Stats["ATK_SPEED"].add_modifier(amount)
-		"max_health":
+		"HEALTH":
 			Player_Stats["HEALTH"].add_modifier(amount)
 		_:
 			push_error("Unknown player stat: %s" % stat_name)

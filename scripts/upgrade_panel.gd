@@ -40,20 +40,6 @@ func apply_upgrade(up: Upgrade):
 
 	for stat_name in up.modifiers.keys():
 		var amount = float(up.modifiers[stat_name])
-		if player.has_method("add_player_stat_modifier"):
-			player.add_player_stat_modifier(stat_name, amount)
-		else:
-			match stat_name:
-				"attack_damage":
-					player.attack_damage += int(amount)
-				"walking_speed":
-					player.walking_speed += amount
-				"attack_speed":
-					player.attack_speed += amount
-				"max_health":
-					player.max_health += int(amount)
-					player.health = min(player.health + int(amount), player.max_health)
-				_:
-					push_error("Upgrade stat %s not recognized" % stat_name)
+		player.add_player_stat_modifier(stat_name, amount)
 
 	hide()
