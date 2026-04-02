@@ -86,7 +86,7 @@ func _physics_process(delta: float) -> void:
 				# apply damage / knockback if very close
 				if dist <= attack_range + 0.25:
 					if player.has_method("take_damage"):
-						player.take_damage(attack_damage)
+						player.take_damage()#attack_damage)
 					else:
 						# fallback: nudge player's velocity (if CharacterBody3D)
 						if player is CharacterBody3D:

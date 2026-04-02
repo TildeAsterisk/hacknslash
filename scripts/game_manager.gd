@@ -4,6 +4,7 @@ const max_world_enemy_count : int = 25
 var spawned_entities : Array = []
 var points : int = 0
 @onready var label: Label = $CanvasLayer/Control/Label
+@onready var upgrade_panel: Control = $CanvasLayer/UpgradePanel
 
 
 # Called when the node enters the scene tree for the first time.
@@ -58,6 +59,10 @@ func spawn_enemy_around_player():
 func update_points():
 	points+=1
 	label.text = str(points)
+	if points % 10 == 0:
+		get_tree().paused = true
+		show_upgrade_panel()
+		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 
 
 func get_terrain_height(pos: Vector3) -> float:
@@ -69,3 +74,12 @@ func get_terrain_height(pos: Vector3) -> float:
 	if result:
 		return result.position.y
 	return 0.0 # Default if no ground hit
+
+func show_upgrade_panel():
+	var up1 = Upgrade.new()
+	up1.randomize_upgrade()
+	var up2 = Upgrade.new()
+	up2.randomize_upgrade()
+	var up3 = Upgrade.new()
+	up3.randomize_upgrade()
+	upgrade_panel.show_upgrades([up1, up2, up3])

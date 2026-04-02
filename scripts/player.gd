@@ -27,6 +27,9 @@ var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 
 @onready var game_manager: Node = $"../GameManager"
 
+var health: int = 100
+var max_health: int = 100
+
 func _ready():
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
@@ -124,3 +127,11 @@ func _process_attack():
 			
 			# Add & Update Points!
 			game_manager.update_points()
+
+func take_damage(): #dmg: int):
+	# health -= dmg
+	# if health <= 0:
+	# 	get_tree().reload_current_scene()  # Restart on death
+	# Update health bar
+	var healthbar = game_manager.get_node("CanvasLayer/Control/Healthbar")
+	healthbar.value = float(health) / max_health * 100
