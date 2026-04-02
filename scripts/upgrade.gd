@@ -9,9 +9,10 @@ var modifiers: Dictionary = {}
 
 # Define possible stats and their random ranges
 const STAT_CONFIG = {
-	"max_health": {"min": 10, "max": 50, "is_int": true},
-	"attack_power": {"min": 5.0, "max": 15.0, "is_int": false},
-	"move_speed": {"min": 0.1, "max": 0.5, "is_int": false}
+	"HEALTH": {"min": 10, "max": 50, "is_int": true},
+	"ATK_DAMAGE": {"min": 5, "max": 15, "is_int": true},
+	"MOV_SPEED": {"min": 0.5, "max": 1.5, "is_int": false},
+	"ATK_SPEED": {"min": 0.5, "max": 1.5, "is_int": false}
 }
 
 ## Randomizes 1-3 modifiers from the STAT_CONFIG
@@ -34,5 +35,6 @@ func randomize_upgrade():
 		
 		modifiers[stat_name] = value
 	
-	# Update description dynamically
+	# Update name and description dynamically
+	upgrade_name = "Random upgrade"
 	description = "Increases: " + str(modifiers)

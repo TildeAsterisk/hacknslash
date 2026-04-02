@@ -2,33 +2,55 @@ extends CharacterBody3D
 
 @onready var camera_mount: Node3D = $camera_mount
 @onready var animation_player: AnimationPlayer = $graphics/char_model/AnimationPlayer
-@onready var graphics: Node3D = $graphics
-@onready var attack_radius: Area3D = $attack_radius
-
 const anim_path = "PlayerAnimationLibrary/"
+@onready var graphics: Node3D = $graphics
+@onready var game_manager: Node = $"../GameManager"
+var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 
-var SPEED = 3
+@export var Player_Stats: Dictionary = {}
+
+
+var current_health: int = 100
+@onready var attack_radius: Area3D = $attack_radius
+@export var attack_arc_threshold: float = 0.707 #90° arc  # 0.0 = 180° arc (front half)
 const JUMP_VELOCITY = 4.5
-
-var walking_speed = 3.0
-var running_speed = 5.0
+@export var sensitivity_x = 0.25
+@export var sensitivity_y = 0.25
+@export var enemy_spawn_time = 5 # TODO: move this to game manmager
 
 var running = false
 var is_locked = false
-
-@export var sensitivity_x = 0.25
-@export var sensitivity_y = 0.25
-@export var attack_damage: int = 15
-@export var attack_arc_threshold: float = 0.707 #90° arc  # 0.0 = 180° arc (front half)
-@export var enemy_spawn_time = 5
-
 var enemies_hit_this_swing = []
-var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 
-@onready var game_manager: Node = $"../GameManager"
 
 func _ready():
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	# Initialize stat resources
+	Player_Stats["HEALTH"] = Stat.new()
+	Player_Stats["HEALTH"].base_value = 100
+
+	Player_Stats["ATK_DAMAGE"] = Stat.new()
+	Player_Stats["ATK_DAMAGE"].base_value = 15
+
+	Player_Stats["MOV_SPEED"] = Stat.new()
+	Player_Stats["MOV_SPEED"].base_value = 3
+
+	Player_Stats["ATK_SPEED"] = Stat.new()
+	Player_Stats["ATK_SPEED"].base_value = 1
+
+
+func add_player_stat_modifier(stat_name: String, amount: float) -> void:
+	match stat_name:
+		"ATK_DAMAGE":
+			Player_Stats["ATK_DAMAGE"].add_modifier(amount)
+		"MOV_SPEED":
+			Player_Stats["MOV_SPEED"].add_modifier(amount)
+		"ATK_SPEED":
+			Player_Stats["ATK_SPEED"].add_modifier(amount)
+		"HEALTH":
+			Player_Stats["HEALTH"].add_modifier(amount)
+		_:
+			push_error("Unknown player stat: %s" % stat_name)
 
 func _input(event):
 	if event is InputEventMouseMotion:
@@ -37,7 +59,8 @@ func _input(event):
 		camera_mount.rotate_x(deg_to_rad(-event.relative.y)*sensitivity_y)
 
 func _physics_process(delta):
-	
+	var current_mov_speed = Player_Stats["MOV_SPEED"].value
+
 	if !animation_player.is_playing():
 		is_locked = false
 		enemies_hit_this_swing.clear()  # Clear hit list when attack animation ends
@@ -50,10 +73,10 @@ func _physics_process(delta):
 			_process_attack()  # Perform attack check
 	
 	if Input.is_action_pressed("Run"):
-		SPEED = running_speed
+		current_mov_speed = Player_Stats["MOV_SPEED"].value * 1.5
 		running = true
 	else:
-		SPEED = walking_speed
+		current_mov_speed = Player_Stats["MOV_SPEED"].value
 		running = false
 	
 	# Add the gravity.
@@ -78,20 +101,21 @@ func _physics_process(delta):
 					
 			graphics.look_at(position+direction)
 			
-		velocity.x = direction.x * SPEED
-		velocity.z = direction.z * SPEED
+		velocity.x = direction.x * current_mov_speed
+		velocity.z = direction.z * current_mov_speed
 	else:
 		if !is_locked:
 			if animation_player.current_animation != anim_path+"walking" or animation_player.current_animation != anim_path+"running":
 				animation_player.play(anim_path+"idle")
 				
-		velocity.x = move_toward(velocity.x, 0, SPEED)
-		velocity.z = move_toward(velocity.z, 0, SPEED)
+		velocity.x = move_toward(velocity.x, 0, current_mov_speed)
+		velocity.z = move_toward(velocity.z, 0, current_mov_speed)
 		
 	if !is_locked:
 		move_and_slide()
 
 func _process_attack():
+	var current_attack_damage = Player_Stats["ATK_DAMAGE"].value
 	# Get player's forward direction (normalized)
 	var player_forward = -graphics.global_transform.basis.z.normalized()
 	
@@ -117,10 +141,18 @@ func _process_attack():
 			# Enemy is hit! take damage
 			enemies_hit_this_swing.append(body)
 			if body.has_method("take_damage"):
-				body.take_damage(attack_damage)
+				body.take_damage(current_attack_damage)
 			else:
-				print(body.name+" takes "+attack_damage+" damage.")
+				print(body.name+" takes "+current_attack_damage+" damage.")
 			# Spawn hit effect
 			
 			# Add & Update Points!
 			game_manager.update_points()
+
+func take_damage(): #dmg: int):
+	# health -= dmg
+	# if health <= 0:
+	# 	get_tree().reload_current_scene()  # Restart on death
+	# Update health bar
+	var healthbar = game_manager.get_node("CanvasLayer/Control/Healthbar")
+	healthbar.value = float(current_health) / Player_Stats["HEALTH"].value * 100

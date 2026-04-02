@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://00swccko4mlj"]
+[gd_scene format=3 uid="uid://00swccko4mlj"]
 
 [ext_resource type="Script" uid="uid://b2j16e72vk0t0" path="res://scripts/game_manager.gd" id="1_tbgi4"]
 [ext_resource type="Script" uid="uid://ctsqfb2fjal5g" path="res://addons/infinite_heightmap_terrain/infinite_terrain.gd" id="1_tefeu"]
@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://bh4xqwlbxvi6" path="res://assets/textures/tilable-IMG_0044-dark.png" id="4_tefeu"]
 [ext_resource type="PackedScene" uid="uid://vlv1bpsxo1dx" path="res://scenes/enemy.tscn" id="5_tbgi4"]
 [ext_resource type="Texture2D" uid="uid://bc1a651wldmth" path="res://icon.svg" id="5_tipki"]
+[ext_resource type="PackedScene" uid="uid://bayck5qfrw3mh" path="res://scenes/upgrade_panel.tscn" id="6_upgrade"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_o6xl0"]
 font = ExtResource("3_tefeu")
@@ -71,15 +72,15 @@ vertex_color_use_as_albedo = true
 albedo_texture = ExtResource("4_tefeu")
 uv1_scale = Vector3(33.155, 33.155, 33.155)
 
-[node name="World" type="Node3D"]
+[node name="World" type="Node3D" unique_id=2067688761]
 
-[node name="GameManager" type="Node3D" parent="."]
+[node name="GameManager" type="Node3D" parent="." unique_id=322673887]
 script = ExtResource("1_tbgi4")
 enemy_scene = ExtResource("5_tbgi4")
 
-[node name="CanvasLayer" type="CanvasLayer" parent="GameManager"]
+[node name="CanvasLayer" type="CanvasLayer" parent="GameManager" unique_id=2009006857]
 
-[node name="Control" type="Control" parent="GameManager/CanvasLayer"]
+[node name="Control" type="Control" parent="GameManager/CanvasLayer" unique_id=1990612563]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -87,7 +88,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Label" type="Label" parent="GameManager/CanvasLayer/Control"]
+[node name="Label" type="Label" parent="GameManager/CanvasLayer/Control" unique_id=540314561]
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
@@ -104,7 +105,7 @@ label_settings = SubResource("LabelSettings_o6xl0")
 horizontal_alignment = 2
 vertical_alignment = 2
 
-[node name="TextureRect" type="TextureRect" parent="GameManager/CanvasLayer/Control"]
+[node name="TextureRect" type="TextureRect" parent="GameManager/CanvasLayer/Control" unique_id=1740153601]
 z_index = 2
 layout_mode = 1
 anchors_preset = 2
@@ -118,7 +119,7 @@ grow_vertical = 0
 scale = Vector2(0.25, 0.25)
 texture = ExtResource("5_tipki")
 
-[node name="EnergyBar" type="ProgressBar" parent="GameManager/CanvasLayer/Control"]
+[node name="EnergyBar" type="ProgressBar" parent="GameManager/CanvasLayer/Control" unique_id=1624762398]
 z_index = 1
 custom_minimum_size = Vector2(100, 4)
 layout_mode = 1
@@ -135,7 +136,7 @@ theme_override_styles/fill = SubResource("StyleBoxFlat_o6xl0")
 value = 95.0
 show_percentage = false
 
-[node name="DamageBar" type="ProgressBar" parent="GameManager/CanvasLayer/Control/EnergyBar"]
+[node name="DamageBar" type="ProgressBar" parent="GameManager/CanvasLayer/Control/EnergyBar" unique_id=319847390]
 z_index = -1
 layout_mode = 1
 anchors_preset = 15
@@ -147,7 +148,7 @@ theme_override_styles/background = SubResource("StyleBoxFlat_qc6vu")
 theme_override_styles/fill = SubResource("StyleBoxFlat_vjxg4")
 show_percentage = false
 
-[node name="Healthbar" type="ProgressBar" parent="GameManager/CanvasLayer/Control"]
+[node name="Healthbar" type="ProgressBar" parent="GameManager/CanvasLayer/Control" unique_id=1540195340]
 z_index = 1
 custom_minimum_size = Vector2(100, 4)
 layout_mode = 1
@@ -164,7 +165,7 @@ theme_override_styles/fill = SubResource("StyleBoxFlat_8wl12")
 value = 60.0
 show_percentage = false
 
-[node name="DamageBar" type="ProgressBar" parent="GameManager/CanvasLayer/Control/Healthbar"]
+[node name="DamageBar" type="ProgressBar" parent="GameManager/CanvasLayer/Control/Healthbar" unique_id=463818896]
 z_index = -1
 layout_mode = 1
 anchors_preset = 15
@@ -177,19 +178,21 @@ theme_override_styles/fill = SubResource("StyleBoxFlat_vjxg4")
 value = 80.0
 show_percentage = false
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+[node name="UpgradePanel" parent="GameManager/CanvasLayer" unique_id=1399073671 instance=ExtResource("6_upgrade")]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=807582792]
 transform = Transform3D(-0.8660254, -0.32139382, 0.38302228, 0, 0.76604444, 0.6427876, -0.50000006, 0.55667037, -0.66341394, 0, 0, 0)
 light_energy = 0.75
 shadow_enabled = true
 shadow_blur = 0.0
 directional_shadow_mode = 0
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1280031713]
 environment = SubResource("Environment_jsk3o")
 
-[node name="Map" type="Node3D" parent="."]
+[node name="Map" type="Node3D" parent="." unique_id=1134995682]
 
-[node name="InfiniteTerrain" type="StaticBody3D" parent="Map" node_paths=PackedStringArray("player")]
+[node name="InfiniteTerrain" type="StaticBody3D" parent="Map" unique_id=17073302 node_paths=PackedStringArray("player")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.81, 0)
 script = ExtResource("1_tefeu")
 player = NodePath("../../Player")
@@ -200,8 +203,8 @@ terrain_color_steepness_curve = SubResource("Curve_o6xl0")
 terrain_material = SubResource("StandardMaterial3D_tipki")
 metadata/_custom_type_script = "uid://ctsqfb2fjal5g"
 
-[node name="Player" parent="." instance=ExtResource("4_jyhfs")]
+[node name="Player" parent="." unique_id=1203909896 instance=ExtResource("4_jyhfs")]
 enemy_spawn_time = 10
 
-[node name="Enemy" parent="." groups=["enemy"] instance=ExtResource("5_tbgi4")]
+[node name="Enemy" parent="." unique_id=1431923161 groups=["enemy"] instance=ExtResource("5_tbgi4")]
 transform = Transform3D(-1, 0, -1.1920929e-07, 0, 1, 0, 1.1920929e-07, 0, -1, 0, 0, -4)
