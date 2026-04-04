@@ -13,7 +13,6 @@ var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 var current_health: int = 100
 @onready var attack_radius: Area3D = $attack_radius
 @export var attack_arc_threshold: float = 0.707 #90° arc  # 0.0 = 180° arc (front half)
-const JUMP_VELOCITY = 4.5
 @export var sensitivity_x = 0.25
 @export var sensitivity_y = 0.25
 @export var enemy_spawn_time = 5 # TODO: move this to game manmager
@@ -35,14 +34,19 @@ func _ready():
 	Player_Stats["MOV_SPEED"] = Stat.new()
 	Player_Stats["MOV_SPEED"].base_value = 3
 
+	Player_Stats["JUMP_VEL"] = Stat.new()
+	Player_Stats["JUMP_VEL"].base_value = 4.5
+
 	Player_Stats["ATK_SPEED"] = Stat.new()
 	Player_Stats["ATK_SPEED"].base_value = 1
+
+	# stats.health.value_changed.connect(_on_health_updated)
 
 
 func add_player_stat_modifier(stat_name: String, amount: float) -> void:
 	match stat_name:
 		"ATK_DAMAGE":
-			Player_Stats["ATK_DAMAGE"].add_modifier(amount)
+			Player_Stats["ATK_DAMAGE"].add_modifier(amount) ## Flat +amount or Pct (amount*100)%
 		"MOV_SPEED":
 			Player_Stats["MOV_SPEED"].add_modifier(amount)
 		"ATK_SPEED":
@@ -70,8 +74,7 @@ func _physics_process(delta):
 			animation_player.play(anim_path+"punch")
 			is_locked = true
 			enemies_hit_this_swing.clear()  # Reset hit list for new attack
-			_process_attack()  # Perform attack check
-	
+			#_process_attack()  ## Attack check moved to Animation keyframe	
 	if Input.is_action_pressed("Run"):
 		current_mov_speed = Player_Stats["MOV_SPEED"].value * 1.5
 		running = true
@@ -85,7 +88,7 @@ func _physics_process(delta):
 		
 	# Handle Jump.
 	if Input.is_action_just_pressed("ui_accept") and is_on_floor():
-		velocity.y = JUMP_VELOCITY
+		velocity.y = Player_Stats["JUMP_VEL"].value
 
 	# Get the input direction and handle the movement/deceleration.
 	var input_dir = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
@@ -118,7 +121,8 @@ func _process_attack():
 	var current_attack_damage = Player_Stats["ATK_DAMAGE"].value
 	# Get player's forward direction (normalized)
 	var player_forward = -graphics.global_transform.basis.z.normalized()
-	
+	var hit_stopped = false
+
 	# Get all enemies in attack radius
 	var bodies = attack_radius.get_overlapping_bodies()
 	for body in bodies:
@@ -139,13 +143,20 @@ func _process_attack():
 		# Check if enemy is in front (180° arc, dot > 0)
 		if dot_product > attack_arc_threshold:
 			# Enemy is hit! take damage
+			## "Lunge" toward the enemy group
+			#var tween = create_tween()
+			#tween.tween_property(self, "velocity", direction_to_enemy * 100.0, 0.1)
+
 			enemies_hit_this_swing.append(body)
 			if body.has_method("take_damage"):
 				body.take_damage(current_attack_damage)
 			else:
 				print(body.name+" takes "+current_attack_damage+" damage.")
 			# Spawn hit effect
-			
+			if !hit_stopped:
+				apply_hit_stop(0.3)
+				hit_stopped = true		
+
 			# Add & Update Points!
 			game_manager.update_points()
 
@@ -156,3 +167,10 @@ func take_damage(): #dmg: int):
 	# Update health bar
 	var healthbar = game_manager.get_node("CanvasLayer/Control/Healthbar")
 	healthbar.value = float(current_health) / Player_Stats["HEALTH"].value * 100
+
+## Applies a *time stop* effect for a [duration] 
+## Used on hit during combat as a visual effect.
+func apply_hit_stop(duration: float):
+	Engine.time_scale = 0.05 # Slow time almost to a stop
+	await get_tree().create_timer(duration * 0.05).timeout
+	Engine.time_scale = 1.0

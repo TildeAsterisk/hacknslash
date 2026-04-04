@@ -3,7 +3,7 @@ class_name Stat
 
 signal value_changed
 
-@export var base_value: float = 10.0
+@export var base_value: float = 1
 var _modifiers: Array[float] = [] # Flat bonuses
 var _multipliers: Array[float] = [] # Percentage bonuses (e.g., 0.2 for 20%)
 

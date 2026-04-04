@@ -1,6 +1,6 @@
 extends Node3D
 
-const max_world_enemy_count : int = 25
+const max_world_enemy_count : int = 15
 var spawned_entities : Array = []
 var points : int = 0
 @onready var label: Label = $CanvasLayer/Control/Label
